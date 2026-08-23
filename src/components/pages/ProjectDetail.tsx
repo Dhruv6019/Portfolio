@@ -39,7 +39,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
   const [carColor, setCarColor] = useState('#E8432D');
   const [carFinish, setCarFinish] = useState<'metallic' | 'matte' | 'carbon'>('metallic');
 
-
   // PetSphere interactive simulator state
   const [petRole, setPetRole] = useState<'buyer' | 'doctor' | 'delivery'>('buyer');
   const [petVerified, setPetVerified] = useState<boolean>(false);
@@ -90,8 +89,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                 key={p.id}
                 onClick={() => onSelectProject(p.id)}
                 className={`px-3 py-1 font-body text-[0.65rem] tracking-wider uppercase transition-all duration-200 cursor-none ${p.id === project.id
-                    ? 'bg-ink text-canvas font-semibold shadow-sm'
-                    : 'text-muted hover:text-ink hover:bg-ink/[0.05]'
+                  ? 'bg-ink text-canvas font-semibold shadow-sm'
+                  : 'text-muted hover:text-ink hover:bg-ink/[0.05]'
                   }`}
               >
                 {p.number} {p.name.split(' ')[0]}
@@ -220,8 +219,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                       key={m.id}
                       onClick={() => setLoopModel(m.id)}
                       className={`px-2.5 py-1 font-body text-[0.6rem] tracking-wider uppercase transition-all duration-200 cursor-none ${loopModel === m.id
-                          ? 'bg-accent text-canvas font-semibold shadow-sm'
-                          : 'border border-canvas/20 text-canvas/70 hover:text-canvas'
+                        ? 'bg-accent text-canvas font-semibold shadow-sm'
+                        : 'border border-canvas/20 text-canvas/70 hover:text-canvas'
                         }`}
                     >
                       {m.name}
@@ -259,8 +258,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                       key={r.id}
                       onClick={() => setPetRole(r.id)}
                       className={`px-2.5 py-1 font-body text-[0.6rem] tracking-wider uppercase transition-all duration-200 cursor-none ${petRole === r.id
-                          ? 'bg-accent text-canvas font-semibold shadow-sm'
-                          : 'border border-canvas/20 text-canvas/70 hover:text-canvas'
+                        ? 'bg-accent text-canvas font-semibold shadow-sm'
+                        : 'border border-canvas/20 text-canvas/70 hover:text-canvas'
                         }`}
                     >
                       {r.name}
@@ -363,8 +362,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                           key={ch}
                           onClick={() => setLoopChannel(ch)}
                           className={`px-2.5 py-0.5 font-body text-[0.55rem] tracking-wider uppercase transition-all duration-200 cursor-none ${loopChannel === ch
-                              ? 'bg-canvas text-ink font-semibold'
-                              : 'text-canvas/60 hover:text-canvas'
+                            ? 'bg-canvas text-ink font-semibold'
+                            : 'text-canvas/60 hover:text-canvas'
                             }`}
                         >
                           {ch.toUpperCase()}
@@ -385,8 +384,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                         SOURCE: {loopChannel.toUpperCase()} STREAM
                       </span>
                       <span className={`font-mono text-xs px-2 py-0.5 ${loopChannel === 'zendesk'
-                          ? 'bg-red-900/60 text-red-300 border border-red-500/40'
-                          : 'bg-green-900/60 text-green-300 border border-green-500/40'
+                        ? 'bg-red-900/60 text-red-300 border border-red-500/40'
+                        : 'bg-green-900/60 text-green-300 border border-green-500/40'
                         }`}>
                         SENTIMENT: {loopChannel === 'zendesk' ? '-0.89 (CRITICAL)' : loopChannel === 'nps' ? '+0.98 (PROMOTER)' : '+0.82 (POSITIVE)'}
                       </span>
@@ -442,8 +441,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                         key={finish}
                         onClick={() => setCarFinish(finish)}
                         className={`px-3 py-1 font-body text-[0.6rem] tracking-widest uppercase transition-all duration-200 cursor-none ${carFinish === finish
-                            ? 'bg-canvas text-ink font-semibold'
-                            : 'border border-canvas/20 text-canvas/70 hover:text-canvas'
+                          ? 'bg-canvas text-ink font-semibold'
+                          : 'border border-canvas/20 text-canvas/70 hover:text-canvas'
                           }`}
                       >
                         {finish}
@@ -530,8 +529,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-6 font-body text-xs font-semibold tracking-widest uppercase transition-all duration-200 cursor-none border-b-2 -mb-px ${activeTab === tab.id
-                    ? 'border-ink text-ink bg-ink/[0.02]'
-                    : 'border-transparent text-muted hover:text-ink'
+                  ? 'border-ink text-ink bg-ink/[0.02]'
+                  : 'border-transparent text-muted hover:text-ink'
                   }`}
               >
                 {tab.label}
