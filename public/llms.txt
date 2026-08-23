@@ -1,0 +1,81 @@
+# Dhruv Teli — Portfolio
+
+> Full-Stack & AI Engineer. Building enterprise AI platforms, 3D web experiences, and real-time systems.
+
+## About
+
+Dhruv Teli is a Full-Stack and AI Software Engineer based in India, specialising in enterprise-grade AI platforms, real-time systems, 3D WebGL experiences, and multi-tenant SaaS architectures. He has professional experience at Zidio Development and is associated with L J Institute of Engineering & Technology (LJIET).
+
+- Portfolio: https://dhruvteli.vercel.app/
+- GitHub: https://github.com/Dhruv6019
+- LinkedIn: https://www.linkedin.com/in/dhruvteli6019/
+- Resume: https://dhruvteli.vercel.app/#resume
+
+## Core Skills
+
+- **AI & LLM**: Claude Sonnet, GPT-4o, Gemini 2.0 Flash, RAG, Vector Embeddings, NLP Sentiment Analysis
+- **Frontend**: React, Next.js 14 (App Router), TypeScript, Tailwind CSS, Three.js / WebGL, Framer Motion, GSAP
+- **Backend**: Node.js, Express, FastAPI, REST APIs, WebSockets / Socket.IO
+- **Databases**: PostgreSQL, MySQL, Prisma ORM, TypeORM, Redis, Neon Serverless
+- **Machine Learning**: Python, TensorFlow, PyTorch, CNNs, Transfer Learning, Computer Vision
+- **Auth & Security**: NextAuth.js, RBAC, BCrypt, JWT, OTP Verification
+- **DevOps & Tools**: Git, Vercel, Docker, AWS S3, Vite, Postman
+
+## Projects
+
+### Project LOOP — Multi-Tenant AI Customer Feedback Intelligence Platform
+- **URL**: https://dhruvteli.vercel.app/#/project/loop
+- **GitHub**: https://github.com/Dhruv6019/Project-LOOP-T5
+- **Year**: 2025
+- **Role**: Lead AI & Full-Stack Software Engineer @ Zidio Development (Team 5)
+- **Stack**: Next.js 14, TypeScript, PostgreSQL (Neon), Prisma, Claude Sonnet 4.6, GPT-4o, Gemini 2.0 Flash, NextAuth, Tailwind CSS
+- **Description**: Enterprise Voice-of-Customer (VoC) analytics platform. Aggregates multi-channel feedback (App Store, Zendesk, Intercom, NPS), performs real-time NLP sentiment scoring (−1.0 to +1.0), clusters emerging themes, and powers an AI copilot with grounded RAG vector search. Multi-tenant with strict workspaceId isolation and RBAC (Admin, Analyst, Viewer).
+- **Key metrics**: <1.8s AI classification, 3-engine unified multi-AI provider with automatic failover, 100% tenant-scoped data isolation.
+
+### CARVO — 3D Automotive Customization & Commerce Platform
+- **URL**: https://dhruvteli.vercel.app/#/project/carvo
+- **Year**: Sep 2025 – Apr 2026
+- **Role**: Lead Full-Stack & 3D Web Developer @ LJIET
+- **Stack**: React, TypeScript, Tailwind CSS, Three.js (WebGL, PBR Shaders), Node.js, Express, MySQL, TypeORM, WebSockets
+- **Description**: Full-stack automotive platform with real-time 3D vehicle customizer (PBR shaders, 60 FPS), 10,000+ parts marketplace, mechanic service booking, automated PDF invoicing, UPI payments, OTP-verified delivery, and 5 RBAC dashboards (Customer, Seller, Service Provider, Delivery Agent, Admin).
+- **Key metrics**: 10,000+ indexed parts, 60 FPS Three.js customizer, 100% OTP-verified deliveries.
+
+### PetSphere — All-in-One Pet Care & Commerce Ecosystem
+- **URL**: https://dhruvteli.vercel.app/#/project/petsphere
+- **GitHub**: https://github.com/Dhruv6019/petsphere
+- **Year**: Feb 2026
+- **Role**: Lead Full-Stack Architect & Developer
+- **Stack**: React 19 (Vite), TypeScript, Node.js, Express, MySQL, Framer Motion, Ant Design, UPI Payments, JWT
+- **Description**: Comprehensive pet care ecosystem shipped in a 5-day rapid development sprint. Includes pet adoption, e-commerce marketplace, vet/trainer appointment booking, AI pet matchmaking, automated PDF invoices, UPI payments, and OTP-verified logistics across 5 RBAC dashboards.
+- **Key metrics**: Shipped in 5 days, 5 RBAC portals, <65ms MySQL API latency, 100% OTP-verified delivery.
+
+### Votely — Interactive Real-Time Polling Platform
+- **URL**: https://dhruvteli.vercel.app/#/project/votely
+- **Year**: 2024
+- **Role**: Full-Stack Developer & Frontend Engineer
+- **Stack**: React, Node.js, MySQL, Redis, Chart.js, Socket.IO / WebSockets, PHP, Tailwind CSS
+- **Description**: High-concurrency real-time voting platform for conferences, streams, and classrooms. Features zero-latency live chart updates, QR code joining, multi-layer anti-fraud detection (IP throttling, fingerprinting, session hashing), and CSV export.
+- **Key metrics**: <15ms broadcast latency, 1,000+ concurrent voters stress-tested, 99.9% vote integrity, zero duplicates.
+
+### METAcal — AI Health & Calorie Application
+- **URL**: https://dhruvteli.vercel.app/#/project/metacal
+- **Year**: 2024
+- **Role**: ML Engineer & Backend Developer
+- **Stack**: Python, TensorFlow, PyTorch, FastAPI, React, TypeScript, PostgreSQL, Docker, AWS S3
+- **Description**: AI-powered calorie tracking application using computer vision (CNN, transfer learning) to identify food items and estimate nutritional content from photos. Trained on Food-101 and Indian cuisine datasets. Covers 1,500+ dishes with macro & micronutrient breakdown.
+- **Key metrics**: 92.6% classification accuracy (top-3), <1.4s end-to-end scan, 1,500+ dishes indexed, 75% faster logging vs traditional apps.
+
+## Site Structure
+
+- `/` — Main portfolio (Hero, About, Projects, Skills, Experience, Contact)
+- `/#about` — About section
+- `/#projects` — Projects section
+- `/#skills` — Skills section
+- `/#experience` — Experience section
+- `/#contact` — Contact section
+- `/#resume` — Interactive resume viewer
+- `/#/project/loop` — Project LOOP detail page
+- `/#/project/carvo` — CARVO detail page
+- `/#/project/petsphere` — PetSphere detail page
+- `/#/project/votely` — Votely detail page
+- `/#/project/metacal` — METAcal detail page
