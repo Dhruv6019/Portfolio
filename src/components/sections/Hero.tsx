@@ -29,20 +29,31 @@ const Hero: React.FC = () => {
   // DOM Refs for high-performance 90+ FPS direct hardware acceleration
   const photoContainerRef = useRef<HTMLDivElement>(null);
   const colorLayerRef = useRef<HTMLDivElement>(null);
+  const leadCircleRef = useRef<SVGCircleElement>(null);
+  const trail1CircleRef = useRef<SVGCircleElement>(null);
+  const trail2CircleRef = useRef<SVGCircleElement>(null);
+  const trail3CircleRef = useRef<SVGCircleElement>(null);
   const lensRingRef = useRef<HTMLDivElement>(null);
+  const trailRingRef = useRef<HTMLDivElement>(null);
   const coordTagRef = useRef<HTMLDivElement>(null);
   const badgeDotRef = useRef<HTMLSpanElement>(null);
   const badgeTextRef = useRef<HTMLSpanElement>(null);
 
-  // 90+ FPS requestAnimationFrame LERP motion loop
+  // 90+ FPS requestAnimationFrame Multi-Stage Comet-Tail Motion Loop
   useEffect(() => {
     const container = photoContainerRef.current;
     if (!container) return;
 
     let targetX = 160;
     let targetY = 200;
-    let currentX = 160;
-    let currentY = 200;
+    let leadX = 160;
+    let leadY = 200;
+    let trail1X = 160;
+    let trail1Y = 200;
+    let trail2X = 160;
+    let trail2Y = 200;
+    let trail3X = 160;
+    let trail3Y = 200;
     let targetRadius = 0;
     let currentRadius = 0;
     let isHovered = false;
@@ -54,7 +65,7 @@ const Hero: React.FC = () => {
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       targetX = clientX - rect.left;
       targetY = clientY - rect.top;
-      targetRadius = 100; // Lens radius
+      targetRadius = 56; // Compact, refined lens radius (112px diameter)
 
       if (!isHovered) {
         isHovered = true;
@@ -62,7 +73,7 @@ const Hero: React.FC = () => {
           badgeDotRef.current.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse';
         }
         if (badgeTextRef.current) {
-          badgeTextRef.current.textContent = 'SPECTRUM LENS // 90FPS ACTIVE';
+          badgeTextRef.current.textContent = 'AI/ML SPECTRUM LENS // ACTIVE';
         }
         if (coordTagRef.current) {
           coordTagRef.current.style.opacity = '1';
@@ -84,28 +95,64 @@ const Hero: React.FC = () => {
       }
     };
 
-    // Buttery 90+ FPS LERP render loop with sub-pixel interpolation
+    // Fluid comet-tail physics interpolation engine
     const renderLoop = () => {
-      currentX += (targetX - currentX) * 0.16;
-      currentY += (targetY - currentY) * 0.16;
-      currentRadius += (targetRadius - currentRadius) * 0.14;
+      // Multi-stage inertia chain creating an aerodynamic trailing wake
+      leadX += (targetX - leadX) * 0.22;
+      leadY += (targetY - leadY) * 0.22;
 
-      if (colorLayerRef.current) {
-        if (currentRadius > 0.5) {
-          colorLayerRef.current.style.clipPath = `circle(${currentRadius.toFixed(2)}px at ${currentX.toFixed(2)}px ${currentY.toFixed(2)}px)`;
-        } else {
-          colorLayerRef.current.style.clipPath = 'circle(0px at 50% 50%)';
-        }
+      trail1X += (leadX - trail1X) * 0.16;
+      trail1Y += (leadY - trail1Y) * 0.16;
+
+      trail2X += (trail1X - trail2X) * 0.11;
+      trail2Y += (trail1Y - trail2Y) * 0.11;
+
+      trail3X += (trail2X - trail3X) * 0.07;
+      trail3Y += (trail2Y - trail3Y) * 0.07;
+
+      currentRadius += (targetRadius - currentRadius) * 0.16;
+
+      // Update SVG comet-tail clip paths in real-time
+      if (leadCircleRef.current) {
+        leadCircleRef.current.setAttribute('cx', leadX.toFixed(1));
+        leadCircleRef.current.setAttribute('cy', leadY.toFixed(1));
+        leadCircleRef.current.setAttribute('r', currentRadius.toFixed(1));
       }
 
+      if (trail1CircleRef.current) {
+        trail1CircleRef.current.setAttribute('cx', trail1X.toFixed(1));
+        trail1CircleRef.current.setAttribute('cy', trail1Y.toFixed(1));
+        trail1CircleRef.current.setAttribute('r', (currentRadius * 0.78).toFixed(1));
+      }
+
+      if (trail2CircleRef.current) {
+        trail2CircleRef.current.setAttribute('cx', trail2X.toFixed(1));
+        trail2CircleRef.current.setAttribute('cy', trail2Y.toFixed(1));
+        trail2CircleRef.current.setAttribute('r', (currentRadius * 0.54).toFixed(1));
+      }
+
+      if (trail3CircleRef.current) {
+        trail3CircleRef.current.setAttribute('cx', trail3X.toFixed(1));
+        trail3CircleRef.current.setAttribute('cy', trail3Y.toFixed(1));
+        trail3CircleRef.current.setAttribute('r', (currentRadius * 0.32).toFixed(1));
+      }
+
+      // Update Lead Lens Ring
       if (lensRingRef.current) {
-        const ringOpacity = Math.min(1, Math.max(0, currentRadius / 60));
-        lensRingRef.current.style.transform = `translate3d(${(currentX - 100).toFixed(2)}px, ${(currentY - 100).toFixed(2)}px, 0)`;
+        const ringOpacity = Math.min(1, Math.max(0, currentRadius / 40));
+        lensRingRef.current.style.transform = `translate3d(${(leadX - 56).toFixed(1)}px, ${(leadY - 56).toFixed(1)}px, 0)`;
         lensRingRef.current.style.opacity = ringOpacity.toFixed(3);
       }
 
+      // Update Trailing Wake Ring
+      if (trailRingRef.current) {
+        const trailOpacity = Math.min(0.65, Math.max(0, (currentRadius / 45) * 0.65));
+        trailRingRef.current.style.transform = `translate3d(${(trail2X - 38).toFixed(1)}px, ${(trail2Y - 38).toFixed(1)}px, 0)`;
+        trailRingRef.current.style.opacity = trailOpacity.toFixed(3);
+      }
+
       if (coordTagRef.current && isHovered) {
-        coordTagRef.current.textContent = `RGB LENS · X:${Math.round(currentX)} Y:${Math.round(currentY)}`;
+        coordTagRef.current.textContent = `LENS · X:${Math.round(leadX)} Y:${Math.round(leadY)}`;
       }
 
       animationFrameId = requestAnimationFrame(renderLoop);
@@ -377,11 +424,23 @@ const Hero: React.FC = () => {
                 <span ref={badgeTextRef}>DHRUV TELI // 2026</span>
               </div>
 
-              {/* Inner Portrait Canvas with 90FPS GPU Accelerated Lens */}
+              {/* Inner Portrait Canvas with 90FPS GPU Accelerated Comet-Tail Lens */}
               <div
                 ref={photoContainerRef}
                 className="relative w-full h-full overflow-hidden bg-[#161412] select-none cursor-none will-change-transform"
               >
+                {/* SVG Multi-Circle Comet-Tail Clip Mask Definition */}
+                <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+                  <defs>
+                    <clipPath id="hero-spotlight-comet" clipPathUnits="userSpaceOnUse">
+                      <circle ref={leadCircleRef} cx="160" cy="200" r="0" />
+                      <circle ref={trail1CircleRef} cx="160" cy="200" r="0" />
+                      <circle ref={trail2CircleRef} cx="160" cy="200" r="0" />
+                      <circle ref={trail3CircleRef} cx="160" cy="200" r="0" />
+                    </clipPath>
+                  </defs>
+                </svg>
+
                 {/* Subtle dot grid background */}
                 <div
                   className="absolute inset-0 opacity-[0.05] pointer-events-none z-10"
@@ -399,12 +458,12 @@ const Hero: React.FC = () => {
                   draggable={false}
                 />
 
-                {/* Top Layer: Full Vibrant Color Image with 90FPS Direct Clip-Path */}
+                {/* Top Layer: Full Color Image Revealed with Fluid Comet Tail */}
                 <div
                   ref={colorLayerRef}
                   className="absolute inset-0 pointer-events-none will-change-[clip-path]"
                   style={{
-                    clipPath: 'circle(0px at 50% 50%)',
+                    clipPath: 'url(#hero-spotlight-comet)',
                   }}
                 >
                   <img
@@ -415,18 +474,34 @@ const Hero: React.FC = () => {
                   />
                 </div>
 
-                {/* Glowing Spotlight Ring with 90FPS Direct Transform */}
+                {/* Secondary Trailing Wake Ring (Lags behind cursor for fluid tail momentum) */}
+                <div
+                  ref={trailRingRef}
+                  className="absolute top-0 left-0 pointer-events-none rounded-full border border-accent/40 bg-accent/[0.04] shadow-[0_0_16px_rgba(232,67,45,0.2)] z-15 will-change-transform opacity-0 pointer-events-none"
+                  style={{
+                    width: 76,
+                    height: 76,
+                    transform: 'translate3d(0, 0, 0)',
+                  }}
+                />
+
+                {/* Primary Compact Lead Lens Ring with Center AI/ML Label */}
                 <div
                   ref={lensRingRef}
-                  className="absolute top-0 left-0 pointer-events-none rounded-full border border-accent/80 shadow-[0_0_28px_rgba(232,67,45,0.4)] z-20 will-change-transform opacity-0"
+                  className="absolute top-0 left-0 pointer-events-none rounded-full border-2 border-accent shadow-[0_0_22px_rgba(232,67,45,0.45)] z-20 will-change-transform opacity-0 flex items-center justify-center"
                   style={{
-                    width: 200,
-                    height: 200,
+                    width: 112,
+                    height: 112,
                     transform: 'translate3d(0, 0, 0)',
                   }}
                 >
-                  {/* Center Crosshair Lens */}
-                  <span className="absolute inset-0 flex items-center justify-center text-[0.65rem] font-mono text-accent/60 font-bold">+</span>
+                  {/* Center AI/ML Badge matching custom cursor */}
+                  <div className="px-2 py-0.5 rounded-full bg-canvas/90 border border-accent/60 shadow-sm backdrop-blur-xs flex items-center gap-1 pointer-events-none">
+                    <span className="w-1 h-1 rounded-full bg-accent animate-pulse" />
+                    <span className="font-mono text-[0.52rem] font-bold tracking-widest text-ink uppercase">
+                      AI/ML
+                    </span>
+                  </div>
                 </div>
 
                 {/* Real-Time Coordinate Tag */}
@@ -434,7 +509,7 @@ const Hero: React.FC = () => {
                   ref={coordTagRef}
                   className="absolute bottom-3 right-3 z-30 font-mono text-[0.5rem] tracking-wider uppercase px-2 py-0.5 border border-white/20 bg-black/75 backdrop-blur-sm text-white/90 opacity-0 transition-opacity duration-300 pointer-events-none"
                 >
-                  RGB LENS · X:0 Y:0
+                  LENS · X:0 Y:0
                 </div>
               </div>
             </div>
