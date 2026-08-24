@@ -9,8 +9,8 @@ gsap.registerPlugin(ScrollTrigger);
 const contactLinks = [
   {
     label: 'EMAIL',
-    value: 'dhruv.teli@example.com',
-    href: 'mailto:dhruv.teli@example.com',
+    value: 'dhruvteli6019@gmail.com',
+    href: 'mailto:dhruvteli6019@gmail.com',
     icon: Mail,
     id: 'contact-email',
   },

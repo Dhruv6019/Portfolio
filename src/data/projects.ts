@@ -26,6 +26,8 @@ export interface ProjectItem {
   accentColor: string;
   githubUrl: string;
   liveUrl?: string;
+  previewImage?: string;
+  previewStyle?: 'cover' | 'contain';
 }
 
 export const projectsData: ProjectItem[] = [
@@ -35,7 +37,7 @@ export const projectsData: ProjectItem[] = [
     name: 'PROJECT LOOP',
     tagline: 'MULTI-TENANT AI CUSTOMER FEEDBACK INTELLIGENCE PLATFORM',
     category: 'Enterprise AI, NLP & Full-Stack Platform',
-    year: '2025',
+    year: '2026',
     role: 'Lead AI & Full-Stack Software Engineer',
     duration: 'Zidio Development · Team 5',
     status: 'Shipped · Developed at Zidio Development',
@@ -121,10 +123,12 @@ export async function classifyFeedbackWithFallback(content: string, workspaceId:
   throw new Error("All AI inference providers exhausted");
 }`
     },
-    bg: 'linear-gradient(135deg, #0d0d0d 0%, #1a0a0a 40%, #2d0f0f 100%)',
+    bg: '#F8FAFC',
     accentColor: '#E8432D',
     githubUrl: 'https://github.com/Dhruv6019/Project-LOOP-T5',
-    liveUrl: 'https://github.com/Dhruv6019/Project-LOOP-T5'
+    liveUrl: 'https://github.com/Dhruv6019/Project-LOOP-T5',
+    previewImage: '/images/loop-logo.png',
+    previewStyle: 'contain'
   },
   {
     id: 'carvo',
@@ -136,6 +140,8 @@ export async function classifyFeedbackWithFallback(content: string, workspaceId:
     role: 'Lead Full-Stack & 3D Web Developer',
     duration: 'Sep 2025 – Apr 2026',
     status: 'Associated with LJIET (L J Institute of Engineering & Technology)',
+    previewImage: '/images/carvo-logo.png',
+    previewStyle: 'contain',
     description:
       'A full-stack automotive platform combining a real-time 3D customization tool with a 10,000+ parts marketplace, service booking system, and 5 specialized RBAC dashboards.',
     overview: [
@@ -219,7 +225,7 @@ export const verifyRole = (allowedRoles: UserRole[]) => {
   };
 };`
     },
-    bg: 'linear-gradient(135deg, #080c14 0%, #0d1525 50%, #0a1930 100%)',
+    bg: '#FEFDF8',
     accentColor: '#3B82F6',
     githubUrl: 'https://github.com/dhruvteli',
     liveUrl: 'https://www.linkedin.com/in/dhruvteli6019/'
@@ -319,14 +325,232 @@ export async function completeDeliveryWithOTP(orderId: string, inputOtp: string,
   return { success: true, orderId, invoiceUrl, status: 'DELIVERED' };
 }`
     },
-    bg: 'linear-gradient(135deg, #0a110d 0%, #0d1e15 50%, #0b2e1b 100%)',
+    bg: '#F2EFE6',
     accentColor: '#10B981',
     githubUrl: 'https://github.com/Dhruv6019/petsphere',
-    liveUrl: 'https://github.com/Dhruv6019/petsphere'
+    liveUrl: 'https://github.com/Dhruv6019/petsphere',
+    previewImage: '/images/petsphere-logo.png',
+    previewStyle: 'contain'
+  },
+  {
+    id: 'brickbybrick',
+    number: '04',
+    name: 'BRICKBYBRICK',
+    tagline: 'DARK-THEMED MODERN REAL ESTATE MANAGEMENT & PROPERTY LISTING PLATFORM',
+    category: 'Full-Stack Platform & Real Estate Tech',
+    year: 'Jun 2024 – Feb 2025',
+    role: 'Full-Stack Developer & UI/UX Designer',
+    duration: 'Jun 2024 – Feb 2025',
+    status: 'Shipped · Associated with L J Institute of Engineering and Technology (LJIET)',
+    description:
+      'A full-stack dark-themed real estate platform built to simplify property management and listings — featuring multi-role access for users, developers, and admins, with an architectural UI/UX design system crafted entirely in custom CSS.',
+    overview: [
+      'BrickByBrick is a dark-themed, modern real estate management and property listing platform developed in association with L J Institute of Engineering and Technology (LJIET).',
+      'The platform was designed to make property management feel as professional and well-built as the homes it showcases — from searching listings to scheduling site visits, every step in the user journey was designed to be intuitive and fast.'
+    ],
+    problem:
+      'Real estate platforms suffer from cluttered, outdated UIs and disconnected workflows between property searchers, developers, and administrators, leading to poor experience when browsing listings and scheduling property visits.',
+    solution:
+      'Built a full-stack PHP/MySQL platform with a custom CSS design system inspired by architectural aesthetics. Implemented multi-role access control (Users, Developers, Admins), intuitive property listing flows, and a seamless visit scheduling journey from search to confirmation.',
+    architecture: [
+      { step: '01', title: 'Custom CSS Design System', desc: 'Hand-crafted architectural dark-theme design system keeping all UI consistent, modern, and premium' },
+      { step: '02', title: 'Property Listing Engine', desc: 'Full CRUD property management with image uploads, filters, and search for buyers and developers' },
+      { step: '03', title: 'Multi-Role Access Control', desc: 'Separate dashboards and permissions for Users, Property Developers, and Admins' },
+      { step: '04', title: 'Visit Scheduling Flow', desc: 'Intuitive user journey from property discovery to booking a site visit, optimized for speed' },
+      { step: '05', title: 'Admin Management Panel', desc: 'Full admin oversight of listings, users, developers, and visit appointments' }
+    ],
+    keyFeatures: [
+      {
+        title: 'Architectural Dark UI/UX',
+        description: 'A custom CSS design system crafted to feel as modern and premium as the properties it showcases.',
+        tag: 'UI/UX DESIGN'
+      },
+      {
+        title: 'Multi-Role Access Control',
+        description: 'Distinct experiences and dashboards tailored for Users, Property Developers, and Administrators.',
+        tag: 'RBAC'
+      },
+      {
+        title: 'Property Listing & Management',
+        description: 'Full-featured property CRUD with image support, category filters, and advanced search.',
+        tag: 'REAL ESTATE'
+      },
+      {
+        title: 'Visit Scheduling System',
+        description: 'End-to-end flow from property search to scheduling a site visit — intuitive and fast.',
+        tag: 'UX FLOW'
+      },
+      {
+        title: 'PHP/MySQL Backend',
+        description: 'Robust server-side logic handling role-based operations, property data, and appointment management.',
+        tag: 'BACKEND'
+      }
+    ],
+    metrics: [
+      { value: '3 Roles', label: 'Access Control', detail: 'User, Developer, Admin dashboards' },
+      { value: '100%', label: 'Custom CSS', detail: 'Hand-crafted design system' },
+      { value: '8 Mo', label: 'Timeline', detail: 'Jun 2024 – Feb 2025' },
+      { value: 'LJIET', label: 'Association', detail: 'L J Institute of Engineering & Technology' }
+    ],
+    techCategories: [
+      { category: 'Frontend & Design', skills: ['HTML5', 'CSS3 (Custom Design System)', 'JavaScript', 'Dark Theme UI', 'Responsive Design'] },
+      { category: 'Backend & Database', skills: ['PHP', 'MySQL', 'Server-side Scripting', 'CRUD Operations', 'Session Management'] },
+      { category: 'Architecture & UX', skills: ['Multi-Role RBAC', 'Visit Scheduling Flow', 'Property Listing Engine', 'Admin Panel'] },
+      { category: 'Tools & Association', skills: ['Git', 'GitHub', 'LJIET Academic Project', 'Full-Stack Development'] }
+    ],
+    tech: ['PHP', 'MySQL', 'HTML5', 'CSS3', 'JavaScript'],
+    codeSnippet: {
+      filename: 'property_listing.php',
+      language: 'php',
+      code: `<?php
+// BrickByBrick – Multi-Role Property Listing Handler
+session_start();
+require_once 'db.php';
+
+function getPropertiesByRole(PDO $db, string $role, int $userId): array {
+    if ($role === 'admin') {
+        $stmt = $db->query("SELECT * FROM properties ORDER BY created_at DESC");
+    } elseif ($role === 'developer') {
+        $stmt = $db->prepare("SELECT * FROM properties WHERE developer_id = ? ORDER BY created_at DESC");
+        $stmt->execute([$userId]);
+    } else {
+        // Public user — show only approved listings
+        $stmt = $db->query("SELECT * FROM properties WHERE status = 'approved' ORDER BY created_at DESC");
+    }
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Schedule a property visit
+function scheduleVisit(PDO $db, int $propertyId, int $userId, string $visitDate): bool {
+    $stmt = $db->prepare(
+        "INSERT INTO visits (property_id, user_id, visit_date, status) VALUES (?, ?, ?, 'pending')"
+    );
+    return $stmt->execute([$propertyId, $userId, $visitDate]);
+}
+?>`
+    },
+    bg: 'linear-gradient(135deg, #0a0804 0%, #1a1208 50%, #120e06 100%)',
+    accentColor: '#F59E0B',
+    githubUrl: 'https://github.com/Dhruv6019/BrickByBrick',
+    liveUrl: 'https://github.com/Dhruv6019/BrickByBrick'
+  },
+  {
+    id: 'fixora',
+    number: '05',
+    name: 'FIXORA',
+    tagline: 'FULL-STACK HOME SERVICES MARKETPLACE & CROSS-PLATFORM MANAGEMENT PLATFORM',
+    category: 'Full-Stack SaaS & Cross-Platform Mobile',
+    year: 'Feb 2026',
+    role: 'Lead Full-Stack & Mobile Engineer',
+    duration: 'Feb 2026 · Rapid Sprint',
+    status: 'Shipped · Web, Android & iOS via Capacitor',
+    description:
+      'A high-end, full-stack home services marketplace connecting homeowners with professional service providers — featuring real-time booking, interactive technician map tracking, Row Level Security (RLS), and a cross-platform experience across Web, Android, and iOS.',
+    overview: [
+      'Fixora is a premium, mobile-first home services marketplace and management platform built with a modern serverless architecture on Supabase — providing homeowners a seamless experience from booking a service to tracking a technician in real time.',
+      'The platform supports cross-platform deployment across Web, Android, and iOS using Capacitor, and leverages Supabase Row Level Security (RLS) for robust, granular access control across all user roles — homeowners, service providers, and admins.'
+    ],
+    problem:
+      'Home services apps suffer from fragmented booking flows, no real-time technician visibility, and poor cross-platform experiences — leaving homeowners anxious about when providers will arrive and admins blind to operational health.',
+    solution:
+      'Architected a serverless full-stack platform with React, TypeScript, Tailwind CSS, ShadcnUI, and Supabase (PostgreSQL + RLS + Realtime). Integrated Capacitor for native iOS and Android packaging, and an interactive map for live technician tracking during active bookings.',
+    architecture: [
+      { step: '01', title: 'Serverless Backend (Supabase)', desc: 'PostgreSQL with Row Level Security (RLS) policies ensuring strict per-user data isolation across all roles' },
+      { step: '02', title: 'Real-Time Booking Engine', desc: 'Supabase Realtime subscriptions powering live service booking status, provider assignment, and notifications' },
+      { step: '03', title: 'Interactive Technician Map', desc: 'Live map tracking showing technician location during active service calls with ETA updates' },
+      { step: '04', title: 'Cross-Platform via Capacitor', desc: 'Single React codebase compiled to native Android and iOS apps with Capacitor, plus responsive PWA for web' },
+      { step: '05', title: 'Admin Operations Dashboard', desc: 'Comprehensive admin panel for managing providers, bookings, service categories, and business analytics' }
+    ],
+    keyFeatures: [
+      {
+        title: 'Real-Time Service Booking',
+        description: 'Live booking engine with instant provider assignment, status updates, and Supabase Realtime notifications.',
+        tag: 'REAL-TIME'
+      },
+      {
+        title: 'Interactive Technician Tracking',
+        description: 'Map-based live technician tracking with ETA updates during active home service calls.',
+        tag: 'MAPS'
+      },
+      {
+        title: 'Supabase RLS Security',
+        description: 'Row Level Security policies enforcing strict per-user data isolation across homeowners, providers, and admins.',
+        tag: 'SECURITY / RLS'
+      },
+      {
+        title: 'Cross-Platform (Web + Android + iOS)',
+        description: 'Single React codebase deployed as a responsive web app and native Android/iOS apps via Capacitor.',
+        tag: 'CROSS-PLATFORM'
+      },
+      {
+        title: 'Admin Operations Dashboard',
+        description: 'Full business management panel covering provider onboarding, bookings, categories, and analytics.',
+        tag: 'ADMIN'
+      },
+      {
+        title: 'Modern UI with ShadcnUI',
+        description: 'Premium, mobile-first interface built with TailwindCSS and ShadcnUI component library for a polished UX.',
+        tag: 'UI/UX'
+      }
+    ],
+    metrics: [
+      { value: '3 Platforms', label: 'Cross-Platform', detail: 'Web, Android & iOS via Capacitor' },
+      { value: 'RLS', label: 'Row Level Security', detail: 'Supabase per-user data isolation' },
+      { value: 'Real-Time', label: 'Live Tracking', detail: 'Technician map + booking updates' },
+      { value: 'SaaS', label: 'Architecture', detail: 'Serverless Supabase + PostgreSQL' }
+    ],
+    techCategories: [
+      { category: 'Frontend & UI', skills: ['React', 'TypeScript', 'Tailwind CSS', 'ShadcnUI', 'Mobile-First Design'] },
+      { category: 'Backend & Database', skills: ['Supabase', 'PostgreSQL', 'Row Level Security (RLS)', 'Supabase Realtime', 'Supabase Auth'] },
+      { category: 'Mobile & Cross-Platform', skills: ['Capacitor', 'Android', 'iOS', 'PWA', 'Responsive Design'] },
+      { category: 'Architecture & Tools', skills: ['Serverless Architecture', 'Interactive Maps', 'Git', 'GitHub', 'Vite'] }
+    ],
+    tech: ['React', 'TypeScript', 'Supabase', 'Capacitor', 'TailwindCSS', 'ShadcnUI', 'PostgreSQL'],
+    codeSnippet: {
+      filename: 'booking_realtime.ts',
+      language: 'typescript',
+      code: `// Fixora — Real-Time Booking Engine with Supabase RLS + Realtime
+import { supabase } from '@/lib/supabase';
+
+export async function createBooking(booking: BookingPayload): Promise<Booking> {
+  // RLS ensures only the authenticated homeowner can insert their own bookings
+  const { data, error } = await supabase
+    .from('bookings')
+    .insert({
+      homeowner_id: booking.userId,
+      service_id: booking.serviceId,
+      scheduled_at: booking.scheduledAt,
+      address: booking.address,
+      status: 'pending',
+    })
+    .select()
+    .single();
+
+  if (error) throw new Error(\`Booking failed: \${error.message}\`);
+  return data;
+}
+
+// Live subscription to track technician status updates
+export function subscribeToBooking(bookingId: string, onUpdate: (b: Booking) => void) {
+  return supabase
+    .channel(\`booking:\${bookingId}\`)
+    .on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'bookings',
+      filter: \`id=eq.\${bookingId}\`,
+    }, (payload) => onUpdate(payload.new as Booking))
+    .subscribe();
+}`
+    },
+    bg: 'linear-gradient(135deg, #06040f 0%, #0d0820 50%, #110b2e 100%)',
+    accentColor: '#6366F1',
+    githubUrl: 'https://github.com/Dhruv6019/home-sweet-home-services',
+    liveUrl: 'https://github.com/Dhruv6019/home-sweet-home-services'
   },
   {
     id: 'votely',
-    number: '04',
+    number: '06',
     name: 'VOTELY',
     tagline: 'INTERACTIVE POLLING PLATFORM',
     category: 'Real-Time Systems & Data Visualisation',
@@ -406,7 +630,7 @@ export async function completeDeliveryWithOTP(orderId: string, inputOtp: string,
   },
   {
     id: 'metacal',
-    number: '05',
+    number: '07',
     name: 'METACAL',
     tagline: 'AI HEALTH & CALORIE APPLICATION',
     category: 'AI / Machine Learning & Mobile Health',

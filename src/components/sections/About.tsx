@@ -121,7 +121,7 @@ const About: React.FC = () => {
             {[
               { val: '5+', label: 'Projects Shipped' },
               { val: '3+', label: 'Years Building' },
-              { val: 'GTU', label: 'B.Tech AI & ML' },
+              { val: 'Adani', label: 'B.Tech AI & ML' },
             ].map((stat, j) => (
               <div
                 key={j}

@@ -61,7 +61,6 @@ const App: React.FC = () => {
       if (cleanHash.startsWith('project/')) {
         let id = cleanHash.replace('project/', '').replace(/\/$/, '').trim();
         if (id === 'neural-lens') id = 'loop';
-        if (id === 'brickbybrick') id = 'petsphere';
 
         const exists = projectsData.some((p) => p.id === id);
         if (exists) {
@@ -97,7 +96,6 @@ const App: React.FC = () => {
   const handleExploreProject = (id: string) => {
     let targetId = id;
     if (targetId === 'neural-lens') targetId = 'loop';
-    if (targetId === 'brickbybrick') targetId = 'petsphere';
     setActiveProjectId(targetId);
     setIs404(false);
     setIsResume(false);

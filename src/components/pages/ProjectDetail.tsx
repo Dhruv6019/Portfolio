@@ -40,7 +40,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
   const [carFinish, setCarFinish] = useState<'metallic' | 'matte' | 'carbon'>('metallic');
 
   // PetSphere interactive simulator state
-  const [petRole, setPetRole] = useState<'buyer' | 'doctor' | 'delivery'>('buyer');
+  const [petRole, setPetRole] = useState<'buyer' | 'doctor' | 'delivery' | 'user' | 'developer' | 'admin' | 'arrived'>('buyer');
   const [petVerified, setPetVerified] = useState<boolean>(false);
 
   // Votely interactive simulator state
@@ -110,7 +110,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
               <span>SOURCE</span>
             </a>
             <a
-              href="mailto:dhruv.teli@example.com"
+              href="mailto:dhruvteli6019@gmail.com"
               className="magnetic-btn text-[0.65rem] !py-2 !px-4"
             >
               HIRE DHRUV
@@ -246,7 +246,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                 </div>
               )}
 
-              {(project.id === 'petsphere' || project.id === 'brickbybrick') && (
+              {project.id === 'petsphere' && (
                 <div className="flex items-center gap-2">
                   <span className="font-body text-[0.55rem] tracking-wider uppercase text-canvas/50 hidden sm:inline">RBAC ROLE:</span>
                   {([
@@ -268,6 +268,25 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                 </div>
               )}
 
+              {project.id === 'brickbybrick' && (
+                <div className="flex items-center gap-2">
+                  <span className="font-body text-[0.55rem] tracking-wider uppercase text-canvas/50 hidden sm:inline">ROLE:</span>
+                  {(['user', 'developer', 'admin'] as const).map((r) => (
+                    <button
+                      key={r}
+                      onClick={() => setPetRole(r as any)}
+                      className={`px-2.5 py-1 font-body text-[0.6rem] tracking-wider uppercase transition-all duration-200 cursor-none ${
+                        petRole === r
+                          ? 'bg-accent text-canvas font-semibold shadow-sm'
+                          : 'border border-canvas/20 text-canvas/70 hover:text-canvas'
+                      }`}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {project.id === 'votely' && (
                 <div className="flex items-center gap-2">
                   <span className="font-body text-[0.65rem] tracking-widest uppercase text-canvas/70">
@@ -275,12 +294,26 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                   </span>
                 </div>
               )}
+
+              {project.id === 'fixora' && (
+                <div className="flex items-center gap-2">
+                  {['WEB', 'ANDROID', 'iOS'].map((p) => (
+                    <span
+                      key={p}
+                      className="px-2.5 py-1 font-body text-[0.6rem] tracking-wider uppercase border border-canvas/20 text-canvas/70"
+                      style={{ borderColor: '#6366F1', color: '#6366F1' }}
+                    >
+                      {p}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Middle Simulator Content */}
             <div className="relative z-10 my-8 flex items-center justify-center min-h-[260px]">
               {/* PetSphere 5-Role Ecosystem & Delivery OTP Simulator */}
-              {(project.id === 'petsphere' || project.id === 'brickbybrick') && (
+              {project.id === 'petsphere' && (
                 <div className="w-full max-w-2xl bg-black/40 border border-canvas/10 p-6 backdrop-blur-sm">
                   <div className="flex items-center justify-between mb-4 border-b border-canvas/10 pb-3">
                     <span className="font-body text-[0.65rem] tracking-widest uppercase text-accent font-semibold flex items-center gap-1.5">
@@ -345,6 +378,92 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                             }`}
                         >
                           {petVerified ? '✓ DELIVERED (PDF INVOICE DISPATCHED)' : 'VERIFY & COMPLETE'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* BrickByBrick Real Estate Role Simulator */}
+              {project.id === 'brickbybrick' && (
+                <div className="w-full max-w-2xl bg-black/40 border border-canvas/10 p-6 backdrop-blur-sm">
+                  <div className="flex items-center justify-between mb-4 border-b border-canvas/10 pb-3">
+                    <span className="font-body text-[0.65rem] tracking-widest uppercase font-semibold flex items-center gap-1.5" style={{ color: '#F59E0B' }}>
+                      <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#F59E0B' }} />
+                      BRICKBYBRICK // {(petRole === 'buyer' ? 'USER' : petRole === 'doctor' ? 'DEVELOPER' : 'ADMIN').toUpperCase()} PORTAL
+                    </span>
+                    <span className="text-[0.55rem] font-mono text-canvas/60">
+                      STACK: PHP · MYSQL · CSS · RBAC
+                    </span>
+                  </div>
+
+                  {/* User view — property listings */}
+                  {petRole === 'buyer' && (
+                    <div className="bg-black/60 border border-canvas/20 p-4 space-y-3">
+                      <div className="flex justify-between items-center text-xs font-mono text-canvas/80">
+                        <span>PROPERTY LISTINGS · AHMEDABAD</span>
+                        <span style={{ color: '#F59E0B' }}>12 APPROVED LISTINGS</span>
+                      </div>
+                      {[
+                        { name: '3BHK Premium Flat · Prahlad Nagar', price: '₹1.2 Cr', tag: 'APPROVED' },
+                        { name: '2BHK Studio · SG Highway', price: '₹68 L', tag: 'APPROVED' },
+                      ].map((p) => (
+                        <div key={p.name} className="p-2.5 bg-canvas/5 border border-canvas/10 text-xs font-body text-canvas/90 flex justify-between items-center">
+                          <div>
+                            <p className="font-semibold text-canvas">{p.name}</p>
+                            <p className="text-[0.6rem] text-canvas/60 font-mono">CLICK TO SCHEDULE VISIT</p>
+                          </div>
+                          <div className="text-right">
+                            <p style={{ color: '#F59E0B' }} className="font-mono text-xs font-bold">{p.price}</p>
+                            <span className="px-2 py-0.5 bg-green-900/40 border border-green-500/40 text-green-300 text-[0.55rem] font-mono">{p.tag}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Developer view — manage own listings */}
+                  {petRole === 'doctor' && (
+                    <div className="bg-black/60 border border-canvas/20 p-4 space-y-3">
+                      <div className="flex justify-between items-center text-xs font-mono text-canvas/80">
+                        <span>DEV DASHBOARD · SKYLINE BUILDERS</span>
+                        <span className="text-green-400">3 ACTIVE · 1 PENDING</span>
+                      </div>
+                      <div className="p-2.5 bg-canvas/5 border border-canvas/10 text-xs font-body text-canvas/90 flex justify-between items-center">
+                        <div>
+                          <p className="font-semibold text-canvas">Skyline Heights — 4BHK Penthouse</p>
+                          <p className="text-[0.6rem] text-canvas/60 font-mono">SUBMITTED FOR ADMIN REVIEW</p>
+                        </div>
+                        <span className="px-2 py-0.5 border text-[0.55rem] font-mono" style={{ borderColor: '#F59E0B', color: '#F59E0B' }}>
+                          PENDING
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Admin view — approve/reject listings */}
+                  {petRole === 'delivery' && (
+                    <div className="bg-black/60 border border-canvas/20 p-4 space-y-3">
+                      <div className="flex justify-between items-center text-xs font-mono text-canvas/80">
+                        <span>ADMIN PANEL · LISTING APPROVALS</span>
+                        <span style={{ color: '#F59E0B' }}>2 PENDING REVIEW</span>
+                      </div>
+                      <div className="flex items-center gap-3 pt-2">
+                        <div className="flex-1 bg-canvas/5 border border-canvas/10 px-3 py-2">
+                          <p className="font-mono text-xs text-canvas">Skyline Heights — 4BHK Penthouse</p>
+                          <p className="text-[0.6rem] text-canvas/50 font-mono">BY: SKYLINE BUILDERS · ₹2.8 Cr</p>
+                        </div>
+                        <button
+                          onClick={() => setPetVerified(!petVerified)}
+                          className={`px-4 py-2 font-body text-xs font-semibold tracking-wider uppercase transition-colors cursor-none ${
+                            petVerified
+                              ? 'bg-green-600 text-canvas'
+                              : 'text-canvas hover:opacity-80'
+                          }`}
+                          style={!petVerified ? { background: '#F59E0B' } : {}}
+                        >
+                          {petVerified ? '✓ APPROVED & LIVE' : 'APPROVE LISTING'}
                         </button>
                       </div>
                     </div>
@@ -492,8 +611,78 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                 </div>
               )}
 
+              {/* Fixora Real-Time Booking Simulator */}
+              {project.id === 'fixora' && (
+                <div className="w-full max-w-2xl bg-black/40 border border-canvas/10 p-6 backdrop-blur-sm">
+                  <div className="flex items-center justify-between mb-4 border-b border-canvas/10 pb-3">
+                    <span className="font-body text-[0.65rem] tracking-widest uppercase font-semibold flex items-center gap-1.5" style={{ color: '#6366F1' }}>
+                      <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#6366F1' }} />
+                      FIXORA // LIVE BOOKING ENGINE
+                    </span>
+                    <span className="text-[0.55rem] font-mono text-canvas/60">
+                      SUPABASE REALTIME · RLS · CAPACITOR
+                    </span>
+                  </div>
+
+                  <div className="bg-black/60 border border-canvas/20 p-4 space-y-4">
+                    <div className="flex justify-between items-center text-xs font-mono text-canvas/80">
+                      <span>BOOKING #FX-2847 · AC REPAIR & SERVICING</span>
+                      <span style={{ color: '#6366F1' }}>AHMEDABAD, GJ</span>
+                    </div>
+
+                    {/* Booking Status Timeline */}
+                    <div className="space-y-2">
+                      {[
+                        { stage: 'pending', label: 'Booking Submitted', sub: 'Waiting for provider assignment' },
+                        { stage: 'assigned', label: 'Provider Assigned', sub: 'Raj Kumar (AC Specialist) · ★ 4.9' },
+                        { stage: 'enroute', label: 'Technician En Route', sub: 'ETA: 12 mins · Live map active' },
+                        { stage: 'arrived', label: 'Arrived & Completed', sub: 'Invoice generated · ₹850' },
+                      ].map((s, idx) => {
+                        const stageOrder = ['pending', 'assigned', 'enroute', 'arrived'];
+                        const currentIdx = stageOrder.indexOf(petRole === 'buyer' ? 'pending' : petRole === 'doctor' ? 'assigned' : petRole === 'delivery' ? 'enroute' : 'arrived');
+                        const isActive = idx === currentIdx;
+                        const isDone = idx < currentIdx;
+                        return (
+                          <div key={s.stage} className={`flex items-start gap-3 p-2.5 border transition-all ${
+                            isActive ? 'border-canvas/30 bg-canvas/10' : isDone ? 'border-canvas/10 opacity-50' : 'border-canvas/10 opacity-30'
+                          }`}>
+                            <div
+                              className="w-4 h-4 rounded-full flex-shrink-0 mt-0.5 flex items-center justify-center text-[0.5rem] font-mono font-bold"
+                              style={{
+                                background: isDone ? '#10B981' : isActive ? '#6366F1' : 'transparent',
+                                border: `1px solid ${isDone ? '#10B981' : isActive ? '#6366F1' : 'rgba(255,255,255,0.2)'}`,
+                                color: isDone || isActive ? '#fff' : 'rgba(255,255,255,0.3)'
+                              }}
+                            >
+                              {isDone ? '✓' : idx + 1}
+                            </div>
+                            <div>
+                              <p className="font-body text-xs font-semibold text-canvas">{s.label}</p>
+                              <p className="font-mono text-[0.58rem] text-canvas/50">{s.sub}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        const order = ['buyer', 'doctor', 'delivery', 'arrived'] as const;
+                        const cur = order.indexOf(petRole as any);
+                        if (cur < order.length - 1) setPetRole(order[cur + 1] as any);
+                        else setPetRole('buyer' as any);
+                      }}
+                      className="w-full py-2 font-body text-xs font-semibold tracking-wider uppercase text-canvas transition-opacity hover:opacity-80 cursor-none"
+                      style={{ background: '#6366F1' }}
+                    >
+                      {petRole === 'delivery' ? 'RESET BOOKING' : 'ADVANCE BOOKING STATUS →'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Default Simulator for BrickByBrick / MetaCal */}
-              {(project.id === 'brickbybrick' || project.id === 'metacal') && (
+              {(project.id === 'metacal') && (
                 <div className="w-full max-w-xl text-center space-y-4">
                   <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-canvas/30 bg-canvas/5">
                     <Zap size={32} className="text-canvas animate-pulse" />

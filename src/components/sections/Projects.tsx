@@ -9,72 +9,140 @@ import { projectsData } from '../../data/projects';
 gsap.registerPlugin(ScrollTrigger);
 
 // Visual panel component
-const ProjectVisual: React.FC<{ project: ProjectItem }> = ({ project }) => (
-  <div
-    className="w-full h-full relative overflow-hidden flex items-center justify-center min-h-[380px] md:min-h-full"
-    style={{ background: project.bg }}
-  >
-    {/* Dot grid */}
+const ProjectVisual: React.FC<{ project: ProjectItem }> = ({ project }) => {
+  const isLight =
+    project.bg.startsWith('#F') ||
+    project.bg.startsWith('#f') ||
+    project.id === 'carvo' ||
+    project.id === 'loop' ||
+    project.id === 'petsphere';
+
+  return (
     <div
-      className="absolute inset-0 opacity-[0.045]"
-      style={{
-        backgroundImage: `radial-gradient(circle, ${project.accentColor} 1px, transparent 1px)`,
-        backgroundSize: '28px 28px',
-      }}
-    />
-    {/* Radial glow */}
-    <div
-      className="absolute inset-0 opacity-[0.12]"
-      style={{
-        background: `radial-gradient(ellipse at 60% 40%, ${project.accentColor}, transparent 65%)`,
-      }}
-    />
-    {/* Horizontal accent line */}
-    <div
-      className="absolute left-0 right-0 h-px opacity-[0.18]"
-      style={{ background: `linear-gradient(90deg, transparent 0%, ${project.accentColor} 50%, transparent 100%)` }}
-    />
-    {/* Top-left tag */}
-    <div className="absolute top-8 left-8 flex flex-col gap-1.5">
-      <span
-        className="font-body text-[0.52rem] tracking-[0.28em] uppercase"
-        style={{ color: `${project.accentColor}85` }}
-      >
-        PROJECT {project.number}
-      </span>
-      <span
-        className="font-display text-base tracking-wider leading-none"
-        style={{ color: `${project.accentColor}65` }}
-      >
-        {project.name}
-      </span>
-    </div>
-    {/* Ghost number watermark */}
-    <span
-      className="absolute select-none font-display leading-none pointer-events-none"
-      style={{
-        fontSize: 'clamp(6rem, 18vw, 20rem)',
-        letterSpacing: '-0.05em',
-        color: 'transparent',
-        WebkitTextStroke: `1px ${project.accentColor}25`,
-        bottom: '-0.1em',
-        right: '-0.02em',
-      }}
-      aria-hidden
+      className="w-full h-full relative overflow-hidden flex items-center justify-center min-h-[380px] md:min-h-full border-l border-grid"
+      style={{ background: project.bg }}
     >
-      {project.number}
-    </span>
-    {/* Tech count */}
-    <div className="absolute bottom-8 right-8 text-right">
+      {/* Dot grid */}
+      <div
+        className="absolute inset-0 opacity-[0.045]"
+        style={{
+          backgroundImage: `radial-gradient(circle, ${isLight ? '#0F0E0B' : project.accentColor} 1px, transparent 1px)`,
+          backgroundSize: '28px 28px',
+        }}
+      />
+      {/* Radial glow */}
+      {!isLight && (
+        <div
+          className="absolute inset-0 opacity-[0.12]"
+          style={{
+            background: `radial-gradient(ellipse at 60% 40%, ${project.accentColor}, transparent 65%)`,
+          }}
+        />
+      )}
+      {/* Horizontal accent line */}
+      <div
+        className="absolute left-0 right-0 h-px opacity-[0.15]"
+        style={{
+          background: `linear-gradient(90deg, transparent 0%, ${isLight ? '#0F0E0B' : project.accentColor} 50%, transparent 100%)`,
+        }}
+      />
+
+      {/* Preview screenshot/logo (if provided) */}
+      {project.previewImage ? (
+        project.previewStyle === 'contain' ? (
+          // Logo illustration centered seamlessly inside the panel
+          <div className="absolute inset-0 flex items-center justify-center p-6 md:p-12 z-0">
+            <img
+              src={project.previewImage}
+              alt={`${project.name} logo`}
+              className="max-w-[90%] max-h-[82%] sm:max-w-[440px] md:max-w-[500px] w-auto h-auto object-contain
+                         group-hover:scale-[1.04] transition-transform duration-700 select-none pointer-events-none"
+            />
+          </div>
+        ) : (
+          // Full-cover screenshot — focus right where content usually lives
+          <div className="absolute inset-0">
+            <img
+              src={project.previewImage}
+              alt={`${project.name} preview`}
+              className="w-full h-full object-cover object-right-top
+                         group-hover:scale-[1.04] transition-all duration-700"
+            />
+            {/* Multi-direction overlay: dark on edges, clear in center */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0) 70%)',
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 40%)',
+              }}
+            />
+          </div>
+        )
+      ) : null}
+
+      {/* Top-left tag */}
+      <div className="absolute top-8 left-8 flex flex-col gap-1.5 z-10">
+        <span
+          className="font-body text-[0.52rem] tracking-[0.28em] uppercase font-semibold"
+          style={{
+            color: isLight
+              ? 'rgba(15,14,11,0.55)'
+              : project.previewImage
+              ? 'rgba(255,255,255,0.7)'
+              : `${project.accentColor}85`,
+          }}
+        >
+          PROJECT {project.number}
+        </span>
+        <span
+          className="font-display text-base tracking-wider leading-none"
+          style={{
+            color: isLight ? '#0F0E0B' : project.previewImage ? '#ffffff' : `${project.accentColor}65`,
+          }}
+        >
+          {project.name}
+        </span>
+      </div>
+
+      {/* Ghost number watermark */}
       <span
-        className="font-body text-[0.52rem] tracking-[0.28em] uppercase"
-        style={{ color: `${project.accentColor}60` }}
+        className="absolute select-none font-display leading-none pointer-events-none z-0"
+        style={{
+          fontSize: 'clamp(6rem, 18vw, 20rem)',
+          letterSpacing: '-0.05em',
+          color: 'transparent',
+          WebkitTextStroke: isLight ? '1px rgba(15,14,11,0.06)' : `1px ${project.accentColor}25`,
+          bottom: '-0.1em',
+          right: '-0.02em',
+        }}
+        aria-hidden
       >
-        {project.tech.length} TECHNOLOGIES
+        {project.number}
       </span>
+
+      {/* Tech count */}
+      <div className="absolute bottom-8 right-8 text-right z-10">
+        <span
+          className="font-body text-[0.52rem] tracking-[0.28em] uppercase font-semibold"
+          style={{
+            color: isLight
+              ? 'rgba(15,14,11,0.45)'
+              : project.previewImage
+              ? 'rgba(255,255,255,0.7)'
+              : `${project.accentColor}60`,
+          }}
+        >
+          {project.tech.length} TECHNOLOGIES
+        </span>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface ProjectsProps {
   onExploreProject?: (id: string) => void;
@@ -83,6 +151,9 @@ interface ProjectsProps {
 const Projects: React.FC<ProjectsProps> = ({ onExploreProject }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [showAll, setShowAll] = React.useState(false);
+
+  const visibleProjects = showAll ? projectsData : projectsData.slice(0, 3);
 
   useEffect(() => {
     const frameId = requestAnimationFrame(() => {
@@ -127,7 +198,7 @@ const Projects: React.FC<ProjectsProps> = ({ onExploreProject }) => {
     });
 
     return () => cancelAnimationFrame(frameId);
-  }, []);
+  }, [showAll]);
 
   return (
     <section
@@ -184,12 +255,15 @@ const Projects: React.FC<ProjectsProps> = ({ onExploreProject }) => {
 
           {/* Quick Project Directory Index Matrix */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-6">
-            {projectsData.map((p, i) => (
+            {projectsData.map((p) => (
               <button
                 key={p.id}
                 onClick={() => {
-                  const targetEl = projectRefs.current[i];
-                  targetEl?.scrollIntoView({ behavior: 'smooth' });
+                  if (onExploreProject) {
+                    onExploreProject(p.id);
+                  } else {
+                    window.location.hash = `/project/${p.id}`;
+                  }
                 }}
                 className="group border border-grid p-4 text-left hover:border-ink hover:bg-ink/[0.02] transition-all duration-300 cursor-none"
               >
@@ -197,8 +271,8 @@ const Projects: React.FC<ProjectsProps> = ({ onExploreProject }) => {
                   <span className="font-display text-lg text-grid group-hover:text-accent transition-colors">
                     {p.number}
                   </span>
-                  <span className="font-body text-[0.55rem] text-muted uppercase tracking-wider">
-                    {p.year}
+                  <span className="font-body text-[0.55rem] text-muted uppercase tracking-wider group-hover:text-accent transition-colors">
+                    <ArrowUpRight size={10} className="inline opacity-0 group-hover:opacity-100 transition-opacity" />
                   </span>
                 </div>
                 <span className="font-display text-sm text-ink block truncate group-hover:text-accent transition-colors">
@@ -209,13 +283,41 @@ const Projects: React.FC<ProjectsProps> = ({ onExploreProject }) => {
                 </span>
               </button>
             ))}
+
+            {/* Coming Soon placeholder cards to fill remaining grid slots */}
+            {[
+              { label: 'IN DEVELOPMENT', hint: 'Next full-stack build' },
+              { label: 'COMING SOON', hint: 'AI / ML experiment' },
+              { label: 'COMING SOON', hint: 'Mobile-first product' },
+            ].map((slot, i) => (
+              <div
+                key={`soon-${i}`}
+                className="border border-dashed border-grid p-4 flex flex-col justify-between opacity-50"
+                style={{ borderStyle: 'dashed' }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted animate-pulse" />
+                  </span>
+                  <span className="font-body text-[0.5rem] tracking-[0.2em] uppercase text-muted">
+                    {slot.label}
+                  </span>
+                </div>
+                <span className="font-display text-sm text-muted block">
+                  TBA
+                </span>
+                <span className="font-body text-[0.55rem] text-muted block mt-1 italic">
+                  {slot.hint}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Project Panels */}
       <div className="space-y-0">
-        {projectsData.map((project, idx) => (
+        {visibleProjects.map((project, idx) => (
           <div
             key={project.name}
             ref={(el) => { projectRefs.current[idx] = el; }}
@@ -303,6 +405,34 @@ const Projects: React.FC<ProjectsProps> = ({ onExploreProject }) => {
             <div className="absolute bottom-0 left-0 right-0 h-px bg-grid" />
           </div>
         ))}
+      </div>
+
+      {/* View All / Show Less Toggle */}
+      <div className="border-t border-grid px-6 md:px-12 py-16 bg-canvas">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <span className="font-body text-[0.62rem] tracking-[0.25em] font-semibold uppercase text-accent block mb-1">
+              {showAll ? 'SHOWING ALL PROJECTS' : `+${projectsData.length - 3} MORE PROJECTS`}
+            </span>
+            <p className="font-body text-xs text-muted max-w-md">
+              {showAll
+                ? 'Scroll up to revisit any project or explore the full case study.'
+                : 'BrickByBrick, Fixora, Votely, MetaCal and more — full-stack, real estate, home services & AI.'}
+            </p>
+          </div>
+          <MagneticButton
+            id="view-all-projects-btn"
+            onClick={() => {
+              setShowAll((prev) => !prev);
+              if (showAll) {
+                // Scroll back to projects section top when collapsing
+                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+          >
+            {showAll ? 'SHOW LESS' : `VIEW ALL ${projectsData.length} PROJECTS`} <ArrowUpRight size={12} />
+          </MagneticButton>
+        </div>
       </div>
     </section>
   );

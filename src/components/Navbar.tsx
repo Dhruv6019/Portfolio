@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
             {/* Hire Me button */}
             <a
               id="nav-hire-btn"
-              href="mailto:dhruv.teli@example.com"
+              href="mailto:dhruvteli6019@gmail.com"
               className="group relative overflow-hidden font-body text-[0.62rem] font-semibold tracking-[0.18em] uppercase px-5 py-2.5 border border-ink cursor-none"
             >
               <span className="relative z-10 transition-colors duration-300 group-hover:text-canvas">

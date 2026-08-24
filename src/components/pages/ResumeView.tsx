@@ -86,7 +86,7 @@ export const ResumeView: React.FC<ResumeViewProps> = ({ onBack }) => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail size={13} className="text-accent" />
-                  <a href="mailto:dhruv.teli@example.com" className="hover:text-accent transition-colors">
+                  <a href="mailto:dhruvteli6019@gmail.com" className="hover:text-accent transition-colors">
                     dhruvteli.dev@gmail.com
                   </a>
                 </div>
@@ -122,28 +122,28 @@ export const ResumeView: React.FC<ResumeViewProps> = ({ onBack }) => {
               <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                 <div>
                   <h3 className="font-display text-2xl text-ink leading-tight">
-                    BACHELOR OF TECHNOLOGY (B.TECH) IN AI & ML
+                    BACHELOR OF TECHNOLOGY — CS & ENGINEERING (AI & ML)
                   </h3>
                   <p className="font-body text-xs text-muted">
-                    Gujarat Technological University (GTU) · Ahmedabad, India
+                    Adani University · Ahmedabad, India
                   </p>
                 </div>
                 <span className="font-body text-xs font-semibold tracking-wider text-accent shrink-0">
-                  2023 — 2026 (PURSUING)
+                  AUG 2026 — AUG 2029 (PURSUING)
                 </span>
               </div>
 
               <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 pt-3 border-t border-grid/50">
                 <div>
                   <h3 className="font-display text-2xl text-ink leading-tight">
-                    DIPLOMA IN COMPUTER ENGINEERING
+                    DIPLOMA — INFORMATION TECHNOLOGY
                   </h3>
                   <p className="font-body text-xs text-muted">
-                    Government Polytechnic / Technical Board · Gujarat, India
+                    L J Institute of Engineering and Technology (LJIET) · Ahmedabad, India
                   </p>
                 </div>
                 <span className="font-body text-xs font-semibold tracking-wider text-muted shrink-0">
-                  2020 — 2023 · FIRST CLASS WITH DISTINCTION
+                  JUN 2023 — JUN 2026
                 </span>
               </div>
             </div>
