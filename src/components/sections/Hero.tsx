@@ -26,25 +26,110 @@ const Hero: React.FC = () => {
   // Ambient mouse coordinate for subtle lighting
   const [mouseCoord, setMouseCoord] = useState({ x: 50, y: 50 });
 
-  // Interactive circular spotlight lens for hero portrait
-  const [photoSpotlight, setPhotoSpotlight] = useState<{ x: number; y: number; isHovered: boolean }>({
-    x: 0,
-    y: 0,
-    isHovered: false,
-  });
+  // DOM Refs for high-performance 90+ FPS direct hardware acceleration
   const photoContainerRef = useRef<HTMLDivElement>(null);
+  const colorLayerRef = useRef<HTMLDivElement>(null);
+  const lensRingRef = useRef<HTMLDivElement>(null);
+  const coordTagRef = useRef<HTMLDivElement>(null);
+  const badgeDotRef = useRef<HTMLSpanElement>(null);
+  const badgeTextRef = useRef<HTMLSpanElement>(null);
 
-  const handlePhotoMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!photoContainerRef.current) return;
-    const rect = photoContainerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setPhotoSpotlight({ x, y, isHovered: true });
-  };
+  // 90+ FPS requestAnimationFrame LERP motion loop
+  useEffect(() => {
+    const container = photoContainerRef.current;
+    if (!container) return;
 
-  const handlePhotoMouseLeave = () => {
-    setPhotoSpotlight((prev) => ({ ...prev, isHovered: false }));
-  };
+    let targetX = 160;
+    let targetY = 200;
+    let currentX = 160;
+    let currentY = 200;
+    let targetRadius = 0;
+    let currentRadius = 0;
+    let isHovered = false;
+    let animationFrameId: number;
+
+    const onPointerMove = (e: MouseEvent | TouchEvent) => {
+      const rect = container.getBoundingClientRect();
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      targetX = clientX - rect.left;
+      targetY = clientY - rect.top;
+      targetRadius = 100; // Lens radius
+
+      if (!isHovered) {
+        isHovered = true;
+        if (badgeDotRef.current) {
+          badgeDotRef.current.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse';
+        }
+        if (badgeTextRef.current) {
+          badgeTextRef.current.textContent = 'SPECTRUM LENS // 90FPS ACTIVE';
+        }
+        if (coordTagRef.current) {
+          coordTagRef.current.style.opacity = '1';
+        }
+      }
+    };
+
+    const onPointerLeave = () => {
+      targetRadius = 0;
+      isHovered = false;
+      if (badgeDotRef.current) {
+        badgeDotRef.current.className = 'w-1.5 h-1.5 rounded-full bg-accent';
+      }
+      if (badgeTextRef.current) {
+        badgeTextRef.current.textContent = 'DHRUV TELI // 2026';
+      }
+      if (coordTagRef.current) {
+        coordTagRef.current.style.opacity = '0';
+      }
+    };
+
+    // Buttery 90+ FPS LERP render loop with sub-pixel interpolation
+    const renderLoop = () => {
+      currentX += (targetX - currentX) * 0.16;
+      currentY += (targetY - currentY) * 0.16;
+      currentRadius += (targetRadius - currentRadius) * 0.14;
+
+      if (colorLayerRef.current) {
+        if (currentRadius > 0.5) {
+          colorLayerRef.current.style.clipPath = `circle(${currentRadius.toFixed(2)}px at ${currentX.toFixed(2)}px ${currentY.toFixed(2)}px)`;
+        } else {
+          colorLayerRef.current.style.clipPath = 'circle(0px at 50% 50%)';
+        }
+      }
+
+      if (lensRingRef.current) {
+        const ringOpacity = Math.min(1, Math.max(0, currentRadius / 60));
+        lensRingRef.current.style.transform = `translate3d(${(currentX - 100).toFixed(2)}px, ${(currentY - 100).toFixed(2)}px, 0)`;
+        lensRingRef.current.style.opacity = ringOpacity.toFixed(3);
+      }
+
+      if (coordTagRef.current && isHovered) {
+        coordTagRef.current.textContent = `RGB LENS · X:${Math.round(currentX)} Y:${Math.round(currentY)}`;
+      }
+
+      animationFrameId = requestAnimationFrame(renderLoop);
+    };
+
+    container.addEventListener('mousemove', onPointerMove, { passive: true });
+    container.addEventListener('mouseenter', onPointerMove, { passive: true });
+    container.addEventListener('mouseleave', onPointerLeave, { passive: true });
+    container.addEventListener('touchstart', onPointerMove, { passive: true });
+    container.addEventListener('touchmove', onPointerMove, { passive: true });
+    container.addEventListener('touchend', onPointerLeave, { passive: true });
+
+    animationFrameId = requestAnimationFrame(renderLoop);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      container.removeEventListener('mousemove', onPointerMove);
+      container.removeEventListener('mouseenter', onPointerMove);
+      container.removeEventListener('mouseleave', onPointerLeave);
+      container.removeEventListener('touchstart', onPointerMove);
+      container.removeEventListener('touchmove', onPointerMove);
+      container.removeEventListener('touchend', onPointerLeave);
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -288,17 +373,14 @@ const Hero: React.FC = () => {
             >
               {/* Corner Metadata Coordinates */}
               <div className="absolute top-4 left-4 z-30 flex items-center gap-1.5 font-body text-[0.52rem] tracking-[0.25em] uppercase text-muted bg-canvas/90 px-2 py-0.5 border border-grid backdrop-blur-sm pointer-events-none">
-                <span className={`w-1.5 h-1.5 rounded-full transition-colors ${photoSpotlight.isHovered ? 'bg-emerald-500 animate-pulse' : 'bg-accent'}`} />
-                <span>{photoSpotlight.isHovered ? 'LENS ACTIVE // COLOR SPECTRUM' : 'DHRUV TELI // 2026'}</span>
+                <span ref={badgeDotRef} className="w-1.5 h-1.5 rounded-full bg-accent transition-colors" />
+                <span ref={badgeTextRef}>DHRUV TELI // 2026</span>
               </div>
 
-              {/* Inner Portrait Canvas with Interactive Mouse Spotlight */}
+              {/* Inner Portrait Canvas with 90FPS GPU Accelerated Lens */}
               <div
                 ref={photoContainerRef}
-                onMouseMove={handlePhotoMouseMove}
-                onMouseEnter={handlePhotoMouseMove}
-                onMouseLeave={handlePhotoMouseLeave}
-                className="relative w-full h-full overflow-hidden bg-[#161412] select-none cursor-none"
+                className="relative w-full h-full overflow-hidden bg-[#161412] select-none cursor-none will-change-transform"
               >
                 {/* Subtle dot grid background */}
                 <div
@@ -317,13 +399,12 @@ const Hero: React.FC = () => {
                   draggable={false}
                 />
 
-                {/* Top Layer: Full Vibrant Color Image Revealed ONLY Inside Cursor Circle */}
+                {/* Top Layer: Full Vibrant Color Image with 90FPS Direct Clip-Path */}
                 <div
-                  className="absolute inset-0 pointer-events-none transition-[clip-path] duration-75 ease-out"
+                  ref={colorLayerRef}
+                  className="absolute inset-0 pointer-events-none will-change-[clip-path]"
                   style={{
-                    clipPath: photoSpotlight.isHovered
-                      ? `circle(95px at ${photoSpotlight.x}px ${photoSpotlight.y}px)`
-                      : 'circle(0px at 50% 50%)',
+                    clipPath: 'circle(0px at 50% 50%)',
                   }}
                 >
                   <img
@@ -334,28 +415,26 @@ const Hero: React.FC = () => {
                   />
                 </div>
 
-                {/* Glowing Spotlight Ring following the Cursor */}
+                {/* Glowing Spotlight Ring with 90FPS Direct Transform */}
                 <div
-                  className="absolute pointer-events-none rounded-full border border-accent/70 shadow-[0_0_24px_rgba(232,67,45,0.3)] transition-opacity duration-300 z-20"
+                  ref={lensRingRef}
+                  className="absolute top-0 left-0 pointer-events-none rounded-full border border-accent/80 shadow-[0_0_28px_rgba(232,67,45,0.4)] z-20 will-change-transform opacity-0"
                   style={{
-                    width: 190,
-                    height: 190,
-                    left: photoSpotlight.x - 95,
-                    top: photoSpotlight.y - 95,
-                    opacity: photoSpotlight.isHovered ? 1 : 0,
+                    width: 200,
+                    height: 200,
+                    transform: 'translate3d(0, 0, 0)',
                   }}
                 >
-                  {/* Center Crosshair */}
-                  <span className="absolute inset-0 flex items-center justify-center text-[0.6rem] font-mono text-accent/50">+</span>
+                  {/* Center Crosshair Lens */}
+                  <span className="absolute inset-0 flex items-center justify-center text-[0.65rem] font-mono text-accent/60 font-bold">+</span>
                 </div>
 
-                {/* Coordinate Tag */}
+                {/* Real-Time Coordinate Tag */}
                 <div
-                  className={`absolute bottom-3 right-3 z-30 font-mono text-[0.5rem] tracking-wider uppercase px-2 py-0.5 border border-white/20 bg-black/75 backdrop-blur-sm text-white/80 transition-opacity duration-300 pointer-events-none ${
-                    photoSpotlight.isHovered ? 'opacity-100' : 'opacity-0'
-                  }`}
+                  ref={coordTagRef}
+                  className="absolute bottom-3 right-3 z-30 font-mono text-[0.5rem] tracking-wider uppercase px-2 py-0.5 border border-white/20 bg-black/75 backdrop-blur-sm text-white/90 opacity-0 transition-opacity duration-300 pointer-events-none"
                 >
-                  RGB LENS · X:{Math.round(photoSpotlight.x)} Y:{Math.round(photoSpotlight.y)}
+                  RGB LENS · X:0 Y:0
                 </div>
               </div>
             </div>
