@@ -26,6 +26,26 @@ const Hero: React.FC = () => {
   // Ambient mouse coordinate for subtle lighting
   const [mouseCoord, setMouseCoord] = useState({ x: 50, y: 50 });
 
+  // Interactive circular spotlight lens for hero portrait
+  const [photoSpotlight, setPhotoSpotlight] = useState<{ x: number; y: number; isHovered: boolean }>({
+    x: 0,
+    y: 0,
+    isHovered: false,
+  });
+  const photoContainerRef = useRef<HTMLDivElement>(null);
+
+  const handlePhotoMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!photoContainerRef.current) return;
+    const rect = photoContainerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setPhotoSpotlight({ x, y, isHovered: true });
+  };
+
+  const handlePhotoMouseLeave = () => {
+    setPhotoSpotlight((prev) => ({ ...prev, isHovered: false }));
+  };
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Entrance animation timeline
@@ -256,40 +276,87 @@ const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* ─── RIGHT COLUMN: CLEAN STRAIGHT EDITORIAL PORTRAIT (ALWAYS VISIBLE) ─── */}
+          {/* ─── RIGHT COLUMN: EDITORIAL PORTRAIT WITH CIRCULAR SPOTLIGHT COLOR REVEAL ─── */}
           <div className="md:col-span-5 flex items-center justify-center md:justify-end">
             <div
               ref={portraitCardRef}
-              className="relative border border-grid p-3 bg-canvas shadow-[0_15px_40px_rgba(15,14,11,0.06)] group overflow-hidden"
+              className="relative border border-grid p-2.5 sm:p-3 bg-canvas shadow-[0_15px_40px_rgba(15,14,11,0.06)] group overflow-hidden transition-all duration-500 hover:border-ink/40"
               style={{
                 width: 'clamp(260px, 30vw, 380px)',
                 height: 'clamp(320px, 40vw, 480px)',
               }}
             >
               {/* Corner Metadata Coordinates */}
-              <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 font-body text-[0.52rem] tracking-[0.25em] uppercase text-muted bg-canvas/90 px-2 py-0.5 border border-grid backdrop-blur-sm pointer-events-none">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                <span>DHRUV TELI // 2026</span>
+              <div className="absolute top-4 left-4 z-30 flex items-center gap-1.5 font-body text-[0.52rem] tracking-[0.25em] uppercase text-muted bg-canvas/90 px-2 py-0.5 border border-grid backdrop-blur-sm pointer-events-none">
+                <span className={`w-1.5 h-1.5 rounded-full transition-colors ${photoSpotlight.isHovered ? 'bg-emerald-500 animate-pulse' : 'bg-accent'}`} />
+                <span>{photoSpotlight.isHovered ? 'LENS ACTIVE // COLOR SPECTRUM' : 'DHRUV TELI // 2026'}</span>
               </div>
 
-              {/* Inner Portrait Canvas */}
-              <div className="relative w-full h-full overflow-hidden bg-[#EFECE3]">
-                {/* Subtle 12-col dot grid background */}
+              {/* Inner Portrait Canvas with Interactive Mouse Spotlight */}
+              <div
+                ref={photoContainerRef}
+                onMouseMove={handlePhotoMouseMove}
+                onMouseEnter={handlePhotoMouseMove}
+                onMouseLeave={handlePhotoMouseLeave}
+                className="relative w-full h-full overflow-hidden bg-[#161412] select-none cursor-none"
+              >
+                {/* Subtle dot grid background */}
                 <div
-                  className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                  className="absolute inset-0 opacity-[0.05] pointer-events-none z-10"
                   style={{
-                    backgroundImage: 'radial-gradient(circle, #0F0E0B 1px, transparent 1px)',
+                    backgroundImage: 'radial-gradient(circle, #FAF8F5 1px, transparent 1px)',
                     backgroundSize: '20px 20px',
                   }}
                 />
 
-                {/* Always-Visible Full-Color Crisp Portrait */}
+                {/* Base Layer: Black & White / Monochrome Image */}
                 <img
                   src="/images/dhruv-hero.png"
-                  alt="Dhruv Teli"
-                  className="w-full h-full object-cover object-center select-none filter contrast-[1.06] brightness-[1.02]"
+                  alt="Dhruv Teli (Monochrome)"
+                  className="w-full h-full object-cover object-center select-none filter grayscale contrast-[1.2] brightness-[0.92] transition-transform duration-700 group-hover:scale-[1.02]"
                   draggable={false}
                 />
+
+                {/* Top Layer: Full Vibrant Color Image Revealed ONLY Inside Cursor Circle */}
+                <div
+                  className="absolute inset-0 pointer-events-none transition-[clip-path] duration-75 ease-out"
+                  style={{
+                    clipPath: photoSpotlight.isHovered
+                      ? `circle(95px at ${photoSpotlight.x}px ${photoSpotlight.y}px)`
+                      : 'circle(0px at 50% 50%)',
+                  }}
+                >
+                  <img
+                    src="/images/dhruv-hero.png"
+                    alt="Dhruv Teli (Color Spotlight)"
+                    className="w-full h-full object-cover object-center select-none filter contrast-[1.08] brightness-[1.02] transition-transform duration-700 group-hover:scale-[1.02]"
+                    draggable={false}
+                  />
+                </div>
+
+                {/* Glowing Spotlight Ring following the Cursor */}
+                <div
+                  className="absolute pointer-events-none rounded-full border border-accent/70 shadow-[0_0_24px_rgba(232,67,45,0.3)] transition-opacity duration-300 z-20"
+                  style={{
+                    width: 190,
+                    height: 190,
+                    left: photoSpotlight.x - 95,
+                    top: photoSpotlight.y - 95,
+                    opacity: photoSpotlight.isHovered ? 1 : 0,
+                  }}
+                >
+                  {/* Center Crosshair */}
+                  <span className="absolute inset-0 flex items-center justify-center text-[0.6rem] font-mono text-accent/50">+</span>
+                </div>
+
+                {/* Coordinate Tag */}
+                <div
+                  className={`absolute bottom-3 right-3 z-30 font-mono text-[0.5rem] tracking-wider uppercase px-2 py-0.5 border border-white/20 bg-black/75 backdrop-blur-sm text-white/80 transition-opacity duration-300 pointer-events-none ${
+                    photoSpotlight.isHovered ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  RGB LENS · X:{Math.round(photoSpotlight.x)} Y:{Math.round(photoSpotlight.y)}
+                </div>
               </div>
             </div>
           </div>
