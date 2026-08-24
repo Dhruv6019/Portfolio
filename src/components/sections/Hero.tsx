@@ -21,162 +21,85 @@ const Hero: React.FC = () => {
   const corner1Ref = useRef<HTMLDivElement>(null);
   const corner2Ref = useRef<HTMLDivElement>(null);
   const scrollLineRef = useRef<HTMLDivElement>(null);
+  const portraitImgRef = useRef<HTMLImageElement>(null);
+  const portraitBadgeRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
 
   // Ambient mouse coordinate for subtle lighting
   const [mouseCoord, setMouseCoord] = useState({ x: 50, y: 50 });
+  const [portraitMouse, setPortraitMouse] = useState({ x: 50, y: 50 });
 
-  // DOM Refs for high-performance 90+ FPS direct hardware acceleration
-  const photoContainerRef = useRef<HTMLDivElement>(null);
-  const colorLayerRef = useRef<HTMLDivElement>(null);
-  const leadCircleRef = useRef<SVGCircleElement>(null);
-  const trail1CircleRef = useRef<SVGCircleElement>(null);
-  const trail2CircleRef = useRef<SVGCircleElement>(null);
-  const trail3CircleRef = useRef<SVGCircleElement>(null);
-  const lensRingRef = useRef<HTMLDivElement>(null);
-  const trailRingRef = useRef<HTMLDivElement>(null);
-  const coordTagRef = useRef<HTMLDivElement>(null);
-  const badgeDotRef = useRef<HTMLSpanElement>(null);
-  const badgeTextRef = useRef<HTMLSpanElement>(null);
+  // Cursor follow 3D tilt & parallax handlers on portrait card
+  const handlePortraitMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!portraitCardRef.current) return;
+    const rect = portraitCardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-  // 90+ FPS requestAnimationFrame Multi-Stage Comet-Tail Motion Loop
-  useEffect(() => {
-    const container = photoContainerRef.current;
-    if (!container) return;
+    const xPercent = (x / rect.width) * 100;
+    const yPercent = (y / rect.height) * 100;
+    setPortraitMouse({ x: xPercent, y: yPercent });
 
-    let targetX = 160;
-    let targetY = 200;
-    let leadX = 160;
-    let leadY = 200;
-    let trail1X = 160;
-    let trail1Y = 200;
-    let trail2X = 160;
-    let trail2Y = 200;
-    let trail3X = 160;
-    let trail3Y = 200;
-    let targetRadius = 0;
-    let currentRadius = 0;
-    let isHovered = false;
-    let animationFrameId: number;
+    // Normalized from -1 to 1
+    const normX = (x / rect.width - 0.5) * 2;
+    const normY = (y / rect.height - 0.5) * 2;
 
-    const onPointerMove = (e: MouseEvent | TouchEvent) => {
-      const rect = container.getBoundingClientRect();
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      targetX = clientX - rect.left;
-      targetY = clientY - rect.top;
-      targetRadius = 56; // Compact, refined lens radius (112px diameter)
+    // Smooth subtle 3D tilt & parallax with GSAP
+    gsap.to(portraitCardRef.current, {
+      rotateX: -normY * 8,
+      rotateY: normX * 8,
+      transformPerspective: 1000,
+      duration: 0.35,
+      ease: 'power2.out',
+    });
 
-      if (!isHovered) {
-        isHovered = true;
-        if (badgeDotRef.current) {
-          badgeDotRef.current.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse';
-        }
-        if (badgeTextRef.current) {
-          badgeTextRef.current.textContent = 'AI/ML SPECTRUM LENS // ACTIVE';
-        }
-        if (coordTagRef.current) {
-          coordTagRef.current.style.opacity = '1';
-        }
-      }
-    };
+    if (portraitImgRef.current) {
+      gsap.to(portraitImgRef.current, {
+        x: -normX * 12,
+        y: -normY * 12,
+        scale: 1.06,
+        duration: 0.45,
+        ease: 'power2.out',
+      });
+    }
 
-    const onPointerLeave = () => {
-      targetRadius = 0;
-      isHovered = false;
-      if (badgeDotRef.current) {
-        badgeDotRef.current.className = 'w-1.5 h-1.5 rounded-full bg-accent';
-      }
-      if (badgeTextRef.current) {
-        badgeTextRef.current.textContent = 'DHRUV TELI // 2026';
-      }
-      if (coordTagRef.current) {
-        coordTagRef.current.style.opacity = '0';
-      }
-    };
+    if (portraitBadgeRef.current) {
+      gsap.to(portraitBadgeRef.current, {
+        x: normX * 8,
+        y: normY * 8,
+        duration: 0.35,
+        ease: 'power2.out',
+      });
+    }
+  };
 
-    // Fluid comet-tail physics interpolation engine
-    const renderLoop = () => {
-      // Multi-stage inertia chain creating an aerodynamic trailing wake
-      leadX += (targetX - leadX) * 0.22;
-      leadY += (targetY - leadY) * 0.22;
-
-      trail1X += (leadX - trail1X) * 0.16;
-      trail1Y += (leadY - trail1Y) * 0.16;
-
-      trail2X += (trail1X - trail2X) * 0.11;
-      trail2Y += (trail1Y - trail2Y) * 0.11;
-
-      trail3X += (trail2X - trail3X) * 0.07;
-      trail3Y += (trail2Y - trail3Y) * 0.07;
-
-      currentRadius += (targetRadius - currentRadius) * 0.16;
-
-      // Update SVG comet-tail clip paths in real-time
-      if (leadCircleRef.current) {
-        leadCircleRef.current.setAttribute('cx', leadX.toFixed(1));
-        leadCircleRef.current.setAttribute('cy', leadY.toFixed(1));
-        leadCircleRef.current.setAttribute('r', currentRadius.toFixed(1));
-      }
-
-      if (trail1CircleRef.current) {
-        trail1CircleRef.current.setAttribute('cx', trail1X.toFixed(1));
-        trail1CircleRef.current.setAttribute('cy', trail1Y.toFixed(1));
-        trail1CircleRef.current.setAttribute('r', (currentRadius * 0.78).toFixed(1));
-      }
-
-      if (trail2CircleRef.current) {
-        trail2CircleRef.current.setAttribute('cx', trail2X.toFixed(1));
-        trail2CircleRef.current.setAttribute('cy', trail2Y.toFixed(1));
-        trail2CircleRef.current.setAttribute('r', (currentRadius * 0.54).toFixed(1));
-      }
-
-      if (trail3CircleRef.current) {
-        trail3CircleRef.current.setAttribute('cx', trail3X.toFixed(1));
-        trail3CircleRef.current.setAttribute('cy', trail3Y.toFixed(1));
-        trail3CircleRef.current.setAttribute('r', (currentRadius * 0.32).toFixed(1));
-      }
-
-      // Update Lead Lens Ring
-      if (lensRingRef.current) {
-        const ringOpacity = Math.min(1, Math.max(0, currentRadius / 40));
-        lensRingRef.current.style.transform = `translate3d(${(leadX - 56).toFixed(1)}px, ${(leadY - 56).toFixed(1)}px, 0)`;
-        lensRingRef.current.style.opacity = ringOpacity.toFixed(3);
-      }
-
-      // Update Trailing Wake Ring
-      if (trailRingRef.current) {
-        const trailOpacity = Math.min(0.65, Math.max(0, (currentRadius / 45) * 0.65));
-        trailRingRef.current.style.transform = `translate3d(${(trail2X - 38).toFixed(1)}px, ${(trail2Y - 38).toFixed(1)}px, 0)`;
-        trailRingRef.current.style.opacity = trailOpacity.toFixed(3);
-      }
-
-      if (coordTagRef.current && isHovered) {
-        coordTagRef.current.textContent = `LENS · X:${Math.round(leadX)} Y:${Math.round(leadY)}`;
-      }
-
-      animationFrameId = requestAnimationFrame(renderLoop);
-    };
-
-    container.addEventListener('mousemove', onPointerMove, { passive: true });
-    container.addEventListener('mouseenter', onPointerMove, { passive: true });
-    container.addEventListener('mouseleave', onPointerLeave, { passive: true });
-    container.addEventListener('touchstart', onPointerMove, { passive: true });
-    container.addEventListener('touchmove', onPointerMove, { passive: true });
-    container.addEventListener('touchend', onPointerLeave, { passive: true });
-
-    animationFrameId = requestAnimationFrame(renderLoop);
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      container.removeEventListener('mousemove', onPointerMove);
-      container.removeEventListener('mouseenter', onPointerMove);
-      container.removeEventListener('mouseleave', onPointerLeave);
-      container.removeEventListener('touchstart', onPointerMove);
-      container.removeEventListener('touchmove', onPointerMove);
-      container.removeEventListener('touchend', onPointerLeave);
-    };
-  }, []);
+  const handlePortraitMouseLeave = () => {
+    if (portraitCardRef.current) {
+      gsap.to(portraitCardRef.current, {
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
+    }
+    if (portraitImgRef.current) {
+      gsap.to(portraitImgRef.current, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
+    }
+    if (portraitBadgeRef.current) {
+      gsap.to(portraitBadgeRef.current, {
+        x: 0,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+      });
+    }
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -408,109 +331,55 @@ const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* ─── RIGHT COLUMN: EDITORIAL PORTRAIT WITH CIRCULAR SPOTLIGHT COLOR REVEAL ─── */}
+          {/* ─── RIGHT COLUMN: CLEAN STRAIGHT EDITORIAL PORTRAIT (CURSOR FOLLOW 3D TILT) ─── */}
           <div className="md:col-span-5 flex items-center justify-center md:justify-end">
             <div
               ref={portraitCardRef}
-              className="relative border border-grid p-2.5 sm:p-3 bg-canvas shadow-[0_15px_40px_rgba(15,14,11,0.06)] group overflow-hidden transition-all duration-500 hover:border-ink/40"
+              onMouseMove={handlePortraitMouseMove}
+              onMouseLeave={handlePortraitMouseLeave}
+              className="relative border border-grid p-3 bg-canvas shadow-[0_15px_40px_rgba(15,14,11,0.06)] group overflow-hidden transition-all duration-300"
               style={{
                 width: 'clamp(260px, 30vw, 380px)',
                 height: 'clamp(320px, 40vw, 480px)',
+                transformStyle: 'preserve-3d',
               }}
             >
+              {/* Dynamic cursor light sheen overlay */}
+              <div
+                className="absolute inset-0 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: `radial-gradient(circle 220px at ${portraitMouse.x}% ${portraitMouse.y}%, rgba(255,255,255,0.45), transparent 75%)`,
+                }}
+              />
+
               {/* Corner Metadata Coordinates */}
-              <div className="absolute top-4 left-4 z-30 flex items-center gap-1.5 font-body text-[0.52rem] tracking-[0.25em] uppercase text-muted bg-canvas/90 px-2 py-0.5 border border-grid backdrop-blur-sm pointer-events-none">
-                <span ref={badgeDotRef} className="w-1.5 h-1.5 rounded-full bg-accent transition-colors" />
-                <span ref={badgeTextRef}>DHRUV TELI // 2026</span>
+              <div
+                ref={portraitBadgeRef}
+                className="absolute top-4 left-4 z-20 flex items-center gap-1.5 font-body text-[0.52rem] tracking-[0.25em] uppercase text-muted bg-canvas/90 px-2 py-0.5 border border-grid backdrop-blur-sm pointer-events-none transition-transform duration-300"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                <span>DHRUV TELI // 2026</span>
               </div>
 
-              {/* Inner Portrait Canvas with 90FPS GPU Accelerated Comet-Tail Lens */}
-              <div
-                ref={photoContainerRef}
-                className="relative w-full h-full overflow-hidden bg-[#161412] select-none cursor-none will-change-transform"
-              >
-                {/* SVG Multi-Circle Comet-Tail Clip Mask Definition */}
-                <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
-                  <defs>
-                    <clipPath id="hero-spotlight-comet" clipPathUnits="userSpaceOnUse">
-                      <circle ref={leadCircleRef} cx="160" cy="200" r="0" />
-                      <circle ref={trail1CircleRef} cx="160" cy="200" r="0" />
-                      <circle ref={trail2CircleRef} cx="160" cy="200" r="0" />
-                      <circle ref={trail3CircleRef} cx="160" cy="200" r="0" />
-                    </clipPath>
-                  </defs>
-                </svg>
-
-                {/* Subtle dot grid background */}
+              {/* Inner Portrait Canvas */}
+              <div className="relative w-full h-full overflow-hidden bg-[#EFECE3]">
+                {/* Subtle 12-col dot grid background */}
                 <div
-                  className="absolute inset-0 opacity-[0.05] pointer-events-none z-10"
+                  className="absolute inset-0 opacity-[0.05] pointer-events-none"
                   style={{
-                    backgroundImage: 'radial-gradient(circle, #FAF8F5 1px, transparent 1px)',
+                    backgroundImage: 'radial-gradient(circle, #0F0E0B 1px, transparent 1px)',
                     backgroundSize: '20px 20px',
                   }}
                 />
 
-                {/* Base Layer: Black & White / Monochrome Image */}
+                {/* Parallax Cursor-Follow Portrait */}
                 <img
+                  ref={portraitImgRef}
                   src="/images/dhruv-hero.png"
-                  alt="Dhruv Teli (Monochrome)"
-                  className="w-full h-full object-cover object-center select-none filter grayscale contrast-[1.2] brightness-[0.92] transition-transform duration-700 group-hover:scale-[1.02]"
+                  alt="Dhruv Teli"
+                  className="w-full h-full object-cover object-center select-none filter contrast-[1.06] brightness-[1.02] transition-transform duration-300 ease-out"
                   draggable={false}
                 />
-
-                {/* Top Layer: Full Color Image Revealed with Fluid Comet Tail */}
-                <div
-                  ref={colorLayerRef}
-                  className="absolute inset-0 pointer-events-none will-change-[clip-path]"
-                  style={{
-                    clipPath: 'url(#hero-spotlight-comet)',
-                  }}
-                >
-                  <img
-                    src="/images/dhruv-hero.png"
-                    alt="Dhruv Teli (Color Spotlight)"
-                    className="w-full h-full object-cover object-center select-none filter contrast-[1.08] brightness-[1.02] transition-transform duration-700 group-hover:scale-[1.02]"
-                    draggable={false}
-                  />
-                </div>
-
-                {/* Secondary Trailing Wake Ring (Lags behind cursor for fluid tail momentum) */}
-                <div
-                  ref={trailRingRef}
-                  className="absolute top-0 left-0 pointer-events-none rounded-full border border-accent/40 bg-accent/[0.04] shadow-[0_0_16px_rgba(232,67,45,0.2)] z-15 will-change-transform opacity-0 pointer-events-none"
-                  style={{
-                    width: 76,
-                    height: 76,
-                    transform: 'translate3d(0, 0, 0)',
-                  }}
-                />
-
-                {/* Primary Compact Lead Lens Ring with Center AI/ML Label */}
-                <div
-                  ref={lensRingRef}
-                  className="absolute top-0 left-0 pointer-events-none rounded-full border-2 border-accent shadow-[0_0_22px_rgba(232,67,45,0.45)] z-20 will-change-transform opacity-0 flex items-center justify-center"
-                  style={{
-                    width: 112,
-                    height: 112,
-                    transform: 'translate3d(0, 0, 0)',
-                  }}
-                >
-                  {/* Center AI/ML Badge matching custom cursor */}
-                  <div className="px-2 py-0.5 rounded-full bg-canvas/90 border border-accent/60 shadow-sm backdrop-blur-xs flex items-center gap-1 pointer-events-none">
-                    <span className="w-1 h-1 rounded-full bg-accent animate-pulse" />
-                    <span className="font-mono text-[0.52rem] font-bold tracking-widest text-ink uppercase">
-                      AI/ML
-                    </span>
-                  </div>
-                </div>
-
-                {/* Real-Time Coordinate Tag */}
-                <div
-                  ref={coordTagRef}
-                  className="absolute bottom-3 right-3 z-30 font-mono text-[0.5rem] tracking-wider uppercase px-2 py-0.5 border border-white/20 bg-black/75 backdrop-blur-sm text-white/90 opacity-0 transition-opacity duration-300 pointer-events-none"
-                >
-                  LENS · X:0 Y:0
-                </div>
               </div>
             </div>
           </div>
