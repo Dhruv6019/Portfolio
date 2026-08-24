@@ -12,6 +12,7 @@ import About from './components/sections/About';
 import Projects from './components/sections/Projects';
 import Skills from './components/sections/Skills';
 import Experience from './components/sections/Experience';
+import Certificates from './components/sections/Certificates';
 import Contact from './components/sections/Contact';
 import ProjectDetail from './components/pages/ProjectDetail';
 import NotFoundGame from './components/pages/NotFoundGame';
@@ -33,7 +34,7 @@ const App: React.FC = () => {
       const cleanHash = rawHash.replace(/^#\/?/, '').trim();
 
       // Empty or standard in-page anchor navigation (Home sections)
-      const validAnchors = ['', 'hero', 'about', 'projects', 'skills', 'experience', 'contact'];
+      const validAnchors = ['', 'hero', 'about', 'projects', 'skills', 'experience', 'certificates', 'contact'];
       if (validAnchors.includes(cleanHash)) {
         setActiveProjectId(null);
         setIs404(false);
@@ -166,6 +167,7 @@ const App: React.FC = () => {
                 <Projects onExploreProject={handleExploreProject} />
                 <Skills />
                 <Experience />
+                <Certificates />
                 <Contact />
               </main>
             </div>

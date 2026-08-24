@@ -87,9 +87,9 @@ const Contact: React.FC = () => {
       <div className="px-6 md:px-12 max-w-7xl mx-auto">
         {/* Section label */}
         <div className="flex items-center gap-4 mb-20">
-          <span className="section-number">06</span>
+          <span className="section-number">07</span>
           <div className="w-8 h-px bg-muted" />
-          <span className="section-number">CONTACT</span>
+          <span className="section-number">GET IN TOUCH</span>
         </div>
 
         {/* Giant CTA words */}
